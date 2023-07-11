@@ -1,21 +1,24 @@
 # Analiza Kriptovalut
-Analiziral bom 5000 kriptovalut iz strani [CoinMarketCap](https://coinmarketcap.com/).  
+Analiziral bom 1000 podjetji iz strani [value.today](https://www.value.today/world-top-1000-companies-as-on-dec-25-2022?title=&field_headquarters_of_company_target_id=All&field_company_category_primary_target_id&field_market_cap_dec_25_2022__value=&page=0).  
 
-Za vsako kriptovaluto bom zajel:
- - Cena na kovanec
- - Rast v 1 uri
- - Rast v 1 dnevu
- - Rast v 1 tednu
- - Market Cap
- - Pretok v 24 urah
- - Količina kovancev v obtoku
+Za vsako podjetje bom zajel:
+ - Trenutni rank
+ - Ime podjetja
+ - Sedež podjetja
+ - Predviden Svetovni rank leta 2025
+ - Tržna kapitalizacija
+ - Svetovni rank pred enim letom
+ - Tržna vrednost
+ - Kategorija podjetja
+ - Število zaposlenih
+ - Letni prihodek
+ - Letni neto dohodek v USD
    
 Analiziral bom:
- - Stabilnost trga glede na ceno na kovanec ter vrednost trga
- - Pretok trga glede na količino kovancev v obtoku
- - Pretok trga glede na rast v {1 ura, 1 dan, 1 tednu}
- - Graf kriptovalut glede Market Cap
- - Najhitreje rastoči
- - Najhitreje padajoči
- - Kovanci z največjim pretokom
- - Najbolj optimalna količina kovancev v obtoku za uspeh kriptovalute
+ - Predvidena rast rank-a
+ - Tržna kapitalizacija / tržno vrednost
+ - Število podjetji glede na kategorijo
+ - Število podjetji glede na državo, njihovo skupno vrednost, prihodek in število zaposlenih.
+ - Letni neto dohodek na zaposlenega (V upanju na gausovo krivuljo pri izdelavi grafa za glede na razrede dohodka)
+ - Letni prihodek/letni neto prihodek 
+
