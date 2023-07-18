@@ -1,13 +1,9 @@
 import csv
 import os
 import requests
-
-
-
-
 import traceback
 
-crypto_directory = 'podatki'
+podjetja_directory = 'podatki'
 
 def download_url_to_string(url):
     try:
@@ -30,13 +26,22 @@ def save_frontpage(page, directory, filename):
     html_strani = download_url_to_string(page)
     save_string_to_file(html_strani, directory, filename)
 
-def top_url(index):
-    return 'https://coinmarketcap.com/?page={}'.format(index)
-def top_name(index):
-    return 'crypto{}'.format(index)
+def url(index):
+    return 'https://www.value.today/world-top-1000-companies-as-on-dec-25-2022?title=&field_headquarters_of_company_target_id=All&field_company_category_primary_target_id&field_market_cap_dec_25_2022__value=&page={}'.format(index)
+def name(index):
+    return 'podjetja{}'.format(index)
 
-for i in range(1,51):
-    save_frontpage(top_url(i), crypto_directory, top_name(i)) 
+for i in range(0,20):
+    save_frontpage(url(i), podjetja_directory, name(i)) 
+
+def read_file_to_string(directory, filename):
+    path = os.path.join(directory, filename)
+    with open(path, 'r', encoding='utf-8') as f:
+        return f.read()
+    
+
+
+
 
 
 
