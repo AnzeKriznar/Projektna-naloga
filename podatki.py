@@ -1,5 +1,8 @@
 import re
 import os
+import csv
+csv_filename = 'podjetja.csv'
+frontpage_filename = 'glavna.html'
 def name(index):
     return 'podjetja{}'.format(index)
 
@@ -70,5 +73,44 @@ def get_dict_from_ad_block(block):
 for i in range(0,20):
     vsebina = read_file_to_string(podjetja_directory, name(i))
     podjetja = page_to_ads(vsebina)
+ 
+
+def ads_from_file(filename, directory):
+    vsebina = read_file_to_string(directory, filename)
+    podjetja = page_to_ads(vsebina)
+    slovarji = []
     for podjetje in podjetja:
-        print(get_dict_from_ad_block(podjetje))
+        slovarji.append(get_dict_from_ad_block(podjetje))
+        print(slovarji)
+    return slovarji
+def write_csv(fieldnames, rows, directory, filename):
+    """
+    Funkcija v csv datoteko podano s parametroma "directory"/"filename" zapiše
+    vrednosti v parametru "rows" pripadajoče ključem podanim v "fieldnames"
+    """
+    os.makedirs(directory, exist_ok=True)
+    path = os.path.join(directory, filename)
+    # ko odpremo datoteko, podamo neobevzni argument newline in ga nastavimo na prazen niz,
+    # sicer bomo na windowsih imeli grd csv, kjer bo vsaki dejanski vrstici sledila prazna
+    with open(path, 'w', encoding='utf-8', newline='') as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+    return
+def write_podjetja_ads_to_csv(ads, directory, filename):
+    """Funkcija vse podatke iz parametra "ads" zapiše v csv datoteko podano s
+    parametroma "directory"/"filename". Funkcija predpostavi, da so ključi vseh
+    slovarjev parametra ads enaki in je seznam ads neprazen."""
+    # Stavek assert preveri da zahteva velja
+    # Če drži se program normalno izvaja, drugače pa sproži napako
+    # Prednost je v tem, da ga lahko pod določenimi pogoji izklopimo v
+    # produkcijskem okolju
+    assert ads and (all(slovar.keys() == ads[0].keys() for slovar in ads))
+    write_csv(ads[0], ads, directory, filename)
+
+for i in range(0,20):
+    if i == 0:
+        vsi_slovarji = []
+    vsi_slovarji += ads_from_file(name(i), podjetja_directory)
+write_podjetja_ads_to_csv(vsi_slovarji, "obdelani_podatki", csv_filename)
