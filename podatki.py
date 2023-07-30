@@ -38,38 +38,49 @@ def get_dict_from_ad_block(block):
     try:
         sedez = re.search(vzorec_sedez, block, flags=re.DOTALL).group(2)
     except AttributeError:
-        sedez = 'None'
+        sedez = None
     try:
         Market_cap_Dec_2022 = re.search(vzorec_Market_cap_Dec_2022, block, flags=re.DOTALL).group(1)
+        Market_cap_Dec_2022= Market_cap_Dec_2022.replace(' Billion USD','')
+        Market_cap_Dec_2022= Market_cap_Dec_2022.replace(',','')
     except AttributeError:
-        Market_cap_Dec_2022 = 'None'
+        Market_cap_Dec_2022 = None
     try:
         World_Rank_Jan_2022 = re.search(vzorec_World_Rank_Jan_2022, block).group(1)
+        World_Rank_Jan_2022= World_Rank_Jan_2022.replace(',','')
     except AttributeError:
-        World_Rank_Jan_2022 = 'None'
+        World_Rank_Jan_2022 = None
     try:
         World_Market_Value_Jan_2022 = re.search(vzorec_Market_Value_Jan_2022, block).group(1)
+        World_Market_Value_Jan_2022= World_Market_Value_Jan_2022.replace(' Billion USD','')
+        World_Market_Value_Jan_2022= World_Market_Value_Jan_2022.replace(',','')
     except AttributeError:
-        World_Market_Value_Jan_2022 = 'None'
+        World_Market_Value_Jan_2022 = None
     try:
         Kategorija = re.search(vzorec_kategorija_podjetja, block).group(2)
     except AttributeError:
-        Kategorija = 'None'
+        Kategorija = None
     try:
         zaposleni = re.search(vzorec_stevilo_zaposlenih, block).group(1)
+        zaposleni= zaposleni.replace(',','')
     except AttributeError:
-        zaposleni = 'None'
+        zaposleni = None
     try:
         letni_dohodek = re.search(vzorec_Letni_dohodek, block).group(1)
+        letni_dohodek= letni_dohodek.replace(' Million USD','')
+        letni_dohodek= letni_dohodek.replace(',','')
     except AttributeError:
-        letni_dohodek = 'None'
+        letni_dohodek = None
     try:
         Neto_dohodek = re.search(vzorec_Letni_Neto_dohodek, block).group(1)
+        Neto_dohodek= Neto_dohodek.replace(' Million USD','')
+        Neto_dohodek= Neto_dohodek.replace(',','')
     except AttributeError:
-        Neto_dohodek = 'None'
+        Neto_dohodek = None
+    svetovni_rang_2025 =svetovni_rang_2025.replace(',','')
     
-    return {"ime": ime, "Sedež": sedez, "Svetovni rang 2025": svetovni_rang_2025, 'Tržna kapitalzicija Dec-25-2022': Market_cap_Dec_2022, 'Svetovni rang Jan 2022': World_Rank_Jan_2022, 'Tržna vrednost Jan 2022': World_Market_Value_Jan_2022, 'Kategorija': Kategorija, 'Število zaposlenih': zaposleni, 'Letni dohodek':
-            letni_dohodek, 'Neto dohodek': Neto_dohodek}
+    return {"ime": ime, "Sedež": sedez, "Svetovni rang 2025": svetovni_rang_2025, 'Tržna kapitalzicija Dec-25-2022 (Billion $)': Market_cap_Dec_2022, 'Svetovni rang Jan 2022': World_Rank_Jan_2022, 'Tržna vrednost Jan 2022 (Billion $)': World_Market_Value_Jan_2022, 'Kategorija': Kategorija, 'Število zaposlenih': zaposleni, 'Letni dohodek (Million $)':
+            letni_dohodek, 'Neto dohodek (Million $)': Neto_dohodek}
 for i in range(0,20):
     vsebina = read_file_to_string(podjetja_directory, name(i))
     podjetja = page_to_ads(vsebina)
@@ -84,14 +95,10 @@ def ads_from_file(filename, directory):
         print(slovarji)
     return slovarji
 def write_csv(fieldnames, rows, directory, filename):
-    """
-    Funkcija v csv datoteko podano s parametroma "directory"/"filename" zapiše
-    vrednosti v parametru "rows" pripadajoče ključem podanim v "fieldnames"
-    """
+   
     os.makedirs(directory, exist_ok=True)
     path = os.path.join(directory, filename)
-    # ko odpremo datoteko, podamo neobevzni argument newline in ga nastavimo na prazen niz,
-    # sicer bomo na windowsih imeli grd csv, kjer bo vsaki dejanski vrstici sledila prazna
+
     with open(path, 'w', encoding='utf-8', newline='') as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
         writer.writeheader()
@@ -99,13 +106,7 @@ def write_csv(fieldnames, rows, directory, filename):
             writer.writerow(row)
     return
 def write_podjetja_ads_to_csv(ads, directory, filename):
-    """Funkcija vse podatke iz parametra "ads" zapiše v csv datoteko podano s
-    parametroma "directory"/"filename". Funkcija predpostavi, da so ključi vseh
-    slovarjev parametra ads enaki in je seznam ads neprazen."""
-    # Stavek assert preveri da zahteva velja
-    # Če drži se program normalno izvaja, drugače pa sproži napako
-    # Prednost je v tem, da ga lahko pod določenimi pogoji izklopimo v
-    # produkcijskem okolju
+   
     assert ads and (all(slovar.keys() == ads[0].keys() for slovar in ads))
     write_csv(ads[0], ads, directory, filename)
 
